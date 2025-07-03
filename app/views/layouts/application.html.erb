@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>ReportsApp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <% if user_signed_in? %>
+        Logged in as <%= current_user.email %> |
+        <%= link_to 'Logout', destroy_user_session_path, method: :delete %>
+        <% else %>
+        <%= link_to 'Login', new_user_session_path %> |
+        <%= link_to 'Sign Up', new_user_registration_path %>
+        <% end %>
+
+        <hr>
+
+        <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key == "notice" ? "success" : "danger" %> alert-dismissible fade show flash-message mt-3 mx-3" role="alert">
+            <%= value %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% end %>
+
+        <%= yield %>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Flash auto-close script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const alerts = document.querySelectorAll('.flash-message');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 5000);
+            });
+
+            // ✅ Description field character counter
+            const descField = document.getElementById("description-field");
+            const descCount = document.getElementById("desc-count");
+
+            if (descField && descCount) {
+                descField.addEventListener("input", function() {
+                    descCount.innerText = descField.value.length;
+                });
+
+                // Initialize on page load
+                descCount.innerText = descField.value.length;
+            }
+        });
+    </script>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            tinymce.init({
+                selector: '#description-field',
+                plugins: 'link code',
+                menubar: false
+            });
+        });
+    </script>
+
+</body>
+
+</html>
+
+<style>
+    .flash-message {
+        z-index: 1000;
+    }
+</style>

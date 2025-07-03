@@ -1,0 +1,67 @@
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0"> Reports</h1>
+        <%= link_to ' New Report', new_report_path, class: 'btn btn-primary' %>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <%= form_with url: reports_path, method: :get, local: true, class: "row g-2 align-items-end" do |f| %>
+
+            <div class="col-md-6">
+                <%= label_tag :category_dropdown, "Or Choose Category", class: "form-label" %>
+                <%= select_tag :category, options_for_select(@categories.uniq.sort.prepend("All Categories"), params[:category]),
+                  class: "form-select" %>
+            </div>
+
+            <div class="col-md-5">
+                <%= f.label :status, class: "form-label" %>
+                <%= f.select :status, Report.statuses.keys.map { |s| [s.titleize, s] }, { include_blank: "All Statuses" }, class: "form-select" %>
+            </div>
+
+            <div class="col-md-1 d-grid">
+                <%= f.submit 'Filter', class: 'btn btn-info' %>
+            </div>
+            <% end %>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Logo</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @reports.each do |report| %>
+                <tr>
+                    <td><%= report.title %></td>
+                    <td><span class="badge bg-<%= report.status == 'published' ? 'success' : 'secondary' %> text-capitalize"><%= report.status %></span></td>
+                    <td><%= report.category %></td>
+                    <td>
+                        <% if report.logo.attached? %>
+                        <%= image_tag url_for(report.logo), class: "img-thumbnail", width: 60, height: 60, alt: "Report Logo" %>
+                        <% else %>
+                        <span class="text-muted">No Logo</span>
+                        <% end %>
+                    </td>
+                    <td class="text-center">
+                        <%= link_to 'Show', report_path(report), class: 'btn btn-sm btn-outline-primary me-2' %>
+                        <%= link_to 'Edit', edit_report_path(report), class: 'btn btn-sm btn-outline-warning me-2' %>
+                        <%= link_to 'Delete', report_path(report), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-sm btn-outline-danger' %>
+                    </td>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <%= paginate @reports %>
+    </div>
+</div>
