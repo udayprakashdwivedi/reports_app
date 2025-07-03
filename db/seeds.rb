@@ -10,8 +10,8 @@
 User.destroy_all
 Report.destroy_all
 
-admin = User.create!(email: 'admin@example.com', password: 'password', admin: true)
-user = User.create!(email: 'user@example.com', password: 'password', admin: false)
+admin = User.create!(email: 'admin@admin.com', password: 'password', admin: true)
+user = User.create!(email: 'user@gmail.com', password: 'password', admin: false)
 
 5.times do |i|
   Report.create!(
