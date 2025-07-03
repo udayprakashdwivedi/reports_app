@@ -31,3 +31,11 @@ This is a Rails 5.2.8 application for managing reports. It supports user authent
 - Bootstrap 5 + jQuery
 
 ---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/udayprakashdwivedi/reports_app.git
+cd reports_app
